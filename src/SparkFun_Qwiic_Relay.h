@@ -4,12 +4,12 @@
 #include <Wire.h>
 #include <Arduino.h>
 
-enum SF_AVAILABLE_RELAYS {
+enum SF_AVAILABLE_QUAD_RELAYS {
 
-  RELAY_ONE           = 1,
+  RELAY_ONE           = 0x01,
   RELAY_TWO,
   RELAY_THREE,
-  RELAY_FOUR
+  RELAY_FOUR,
 
 };
 
@@ -61,11 +61,11 @@ class Qwiic_Relay
 {  
   public:
 
-    Qwiic_Relay(uint8_t address); // I2C Constructor
+    Qwiic_Relay(uint8_t address); // I-squared-C Constructor
 
     bool begin(TwoWire &wirePort = Wire); // begin function
 
-    //****----THE FOLLOWING FIVE FUNCTION ARE TO BE USED WITH THE SPARKFUN SINGLE RELAY-----****
+    //****----THE FOLLOWING FIVE FUNCTIONS ARE TO BE USED WITH THE SPARKFUN SINGLE RELAY-----****
     
     // This function turns the single relay board on. 
     void turnRelayOn();
@@ -80,10 +80,10 @@ class Qwiic_Relay
 
     // This function for the SparkFun Single Relay, gets the status of the relay:
     // whether on: 1 or off: 0;
-    uint8_t getRelayStatus();
+    uint8_t relayStatus();
 
     // This function gets the version number of the SparkFun Single Relay.
-    float getSingleRelayVersion();
+    float singleRelayVersion();
 
     //*****----THE FOLLOWING FUNCTIONS ARE TO BE USED WITH THE SPARKFUN QUAD RELAY------*****
     
@@ -111,25 +111,28 @@ class Qwiic_Relay
     void toggleAllRelays();
 
     // This function for the SparkFun Quad Relay, gets the status of the relay:
-    // whether on: 15 or off: 0;
-    uint8_t getRelayStatus(uint8_t relay);
+    // whether on: 1 or off: 0;
+    uint8_t relayStatus(uint8_t relay);
 
   private:
 
     uint8_t _address;
-    uint8_t _command;
 
-    // This function handles I2C write commands for turning the relays on. 
+    // This function handles I-squared-C write commands for turning the relays on. 
     // The quad relay relies on the current state of the relay to determine whether
     // or not to turn the respective relay on (or off) and so the current state of
     // the relay is checked before attempting to send a command. 
     void _writeCommandOn(uint8_t _command);
 
-    // This function handles I2C write commands for turning the relays off. 
+    // This function handles I-squared-C write commands for turning the relays off. 
     // The quad relay relies on the current state of the relay to determine whether
     // or not to turn the respective relay off (or on) and so the current state of
     // the relay is checked before attempting to toggle it.
     void _writeCommandOff(uint8_t _command);
+
+    // This command sends the I-squared-C write command to toggle relays from their
+    // current state.
+    void _writeCommandToggle(uint8_t _command);
 
     // This function requests information from the product with a simple
     // I-squared-C transaction.
