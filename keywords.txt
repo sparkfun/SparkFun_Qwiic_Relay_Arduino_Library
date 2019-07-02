@@ -1,3 +1,11 @@
-SparkFun_Qwiic_Relay_Arduino_Library  KEYWORD1
+Qwiic_Relay    KEYWORD1
+begin    KEYWORD2 
+turnRelayOn    KEYWORD2
+turnRelayOff    KEYWORD2
+toggleRelay    KEYWORD2
+relayStatus    KEYWORD2
+singleRelayVersion    KEYWORD2
+turnAllRelaysOn    KEYWORD2
+turnAllRelaysOff    KEYWORD2
+toggleAllRelays    KEYWORD2
 
-begin KEYWORD2

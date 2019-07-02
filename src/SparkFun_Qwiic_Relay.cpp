@@ -55,7 +55,7 @@ void Qwiic_Relay::toggleRelay()
 
 // This function for the SparkFun Single Relay, gets the status of the relay:
 // whether on: 1 or off: 0;
-uint8_t Qwiic_Relay::relayStatus()
+uint8_t Qwiic_Relay::getState()
 {
   uint8_t status =  _readCommand(STATUS);
   return status; 
@@ -121,7 +121,7 @@ void Qwiic_Relay::toggleAllRelays()
 
 // This function for the SparkFun Quad Relay, gets the status of the relay:
 // whether on: 1 or off: 0;
-uint8_t Qwiic_Relay::relayStatus(uint8_t relay)
+uint8_t Qwiic_Relay::getState(uint8_t relay)
 {
 
   uint8_t status; 

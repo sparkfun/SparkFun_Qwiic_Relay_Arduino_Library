@@ -80,7 +80,7 @@ class Qwiic_Relay
 
     // This function for the SparkFun Single Relay, gets the status of the relay:
     // whether on: 1 or off: 0;
-    uint8_t relayStatus();
+    uint8_t getState();
 
     // This function gets the version number of the SparkFun Single Relay.
     float singleRelayVersion();
@@ -112,7 +112,7 @@ class Qwiic_Relay
 
     // This function for the SparkFun Quad Relay, gets the status of the relay:
     // whether on: 1 or off: 0;
-    uint8_t relayStatus(uint8_t relay);
+    uint8_t getState(uint8_t relay);
 
   private:
 
