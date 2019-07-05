@@ -46,7 +46,7 @@ void Qwiic_Relay::turnRelayOff()
 // of the relay: on ---> off or off ----> on.
 void Qwiic_Relay::toggleRelay()
 {
-  uint8_t status = _readCommand(STATUS);
+  uint8_t status = _readCommand(MYSTATUS);
   if (status == SING_RELAY_ON)
     turnRelayOff();
   else  
@@ -57,7 +57,7 @@ void Qwiic_Relay::toggleRelay()
 // whether on: 1 or off: 0;
 uint8_t Qwiic_Relay::getState()
 {
-  uint8_t status =  _readCommand(STATUS);
+  uint8_t status =  _readCommand(MYSTATUS);
   return status; 
 }
 
@@ -134,7 +134,7 @@ uint8_t Qwiic_Relay::getState(uint8_t relay)
   else if(relay == RELAY_FOUR)
     status =  _readCommand(RELAY_FOUR_STATUS);
   else
-    return;
+    return 0;
   
   if( status == QUAD_RELAY_ON ) // Relay status should be consistent
     return 1; // Relay on

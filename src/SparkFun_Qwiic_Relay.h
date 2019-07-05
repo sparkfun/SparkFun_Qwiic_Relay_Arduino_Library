@@ -41,7 +41,7 @@ enum SF_SINGLE_RELAY_COMMANDS {
   TURN_RELAY_OFF      = 0x00,
   TURN_RELAY_ON,
   FIRMWARE_VERSION    = 0x04,
-  STATUS       
+  MYSTATUS       
 
 };
 

@@ -1,11 +1,26 @@
-Qwiic_Relay    KEYWORD1
-begin    KEYWORD2 
-turnRelayOn    KEYWORD2
-turnRelayOff    KEYWORD2
-toggleRelay    KEYWORD2
-relayStatus    KEYWORD2
-singleRelayVersion    KEYWORD2
-turnAllRelaysOn    KEYWORD2
-turnAllRelaysOff    KEYWORD2
-toggleAllRelays    KEYWORD2
+########################################################
+# Syntax Coloring Map for SparkFun RV-1805 Library #
+########################################################
+# Class
+###################################################################
 
+Qwiic_Relay				KEYWORD1
+
+###################################################################
+# Methods and Functions
+###################################################################
+
+begin					KEYWORD2
+turnRelayOn    			KEYWORD2
+turnRelayOff			KEYWORD2
+toggleRelay				KEYWORD2
+getState				KEYWORD2
+singleRelayVersion		KEYWORD2
+relayStatus				KEYWORD2
+turnAllRelaysOn			KEYWORD2
+turnAllRelaysOff		KEYWORD2
+toggleAllRelays			KEYWORD2
+
+###################################################################
+# Constants
+###################################################################
