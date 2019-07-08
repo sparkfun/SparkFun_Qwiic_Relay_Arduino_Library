@@ -134,7 +134,7 @@ uint8_t Qwiic_Relay::getState(uint8_t relay)
   else if(relay == RELAY_FOUR)
     status =  _readCommand(RELAY_FOUR_STATUS);
   else
-    return 0;
+    return INCORR_PARAM;
   
   if( status == QUAD_RELAY_ON ) // Relay status should be consistent
     return 1; // Relay on
@@ -142,6 +142,24 @@ uint8_t Qwiic_Relay::getState(uint8_t relay)
     return QUAD_RELAY_OFF;
 }
 
+// This function changes the I-squared-C address of the Qwiic RFID. The address
+// is written to the memory location in EEPROM that determines its address.
+bool Qwiic_Relay::changeAddress(uint8_t newAddress) 
+{
+
+  if (newAddress < 0x07 || newAddress > 0x78) // Range of legal addresses
+        return false; 
+
+  _i2cPort->beginTransmission( _address);  
+  _i2cPort->write(ADDRESS_LOCATION);  
+  _i2cPort->write(newAddress);  
+
+  if(!_i2cPort->endTransmission())
+    return true; 
+  else
+    return false; 
+
+}
 
 // This function handles I-squared-C write commands for turning the relays on. 
 // The quad relay relies on the current state of the relay to determine whether

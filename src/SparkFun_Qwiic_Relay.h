@@ -56,6 +56,8 @@ enum SF_SINGLE_RELAY_STATUS {
 #define QUAD_ALTERNATE_ADDRESS   0x6C
 #define SINGLE_DEFAULT_ADDRESS   0x18
 #define SINGLE_ALTERNATE_ADDRESS 0x19
+#define ADDRESS_LOCATION 0xC7
+#define INCORR_PARAM     0xFF
 
 class Qwiic_Relay
 {  
@@ -113,6 +115,10 @@ class Qwiic_Relay
     // This function for the SparkFun Quad Relay, gets the status of the relay:
     // whether on: 1 or off: 0;
     uint8_t getState(uint8_t relay);
+
+    // This function changes the I-squared-C address of the Qwiic RFID. The address
+    // is written to the memory location in EEPROM that determines its address.
+    bool changeAddress(uint8_t newAddress);
 
   private:
 
