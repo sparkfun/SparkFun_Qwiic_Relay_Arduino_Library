@@ -68,6 +68,19 @@ float Qwiic_Relay::singleRelayVersion()
   return(version);
 }
 
+
+//This function starts a slow PWM (1Hz) with a range from 0-100 so as this is the maximum PWM resolution for Zero-crossing SSR's at 50Hz
+bool Qwiic_Relay::setSlowPWM(uint8_t relay, uint8_t pwmValue)
+{
+  return _writeAddress(RELAY_ONE_PWM + relay - 1, pwmValue);
+}
+
+//This function starts a slow PWM (1Hz) with a range from 0-100 so as this is the maximum PWM resolution for Zero-crossing SSR's at 50Hz
+uint8_t Qwiic_Relay::getSlowPWM(uint8_t relay)
+{
+  return _readCommand(RELAY_ONE_PWM + relay - 1);
+}
+
 //*****----THE FOLLOWING FUNCTIONS ARE TO BE USED WITH THE SPARKFUN QUAD RELAY------*****
  
 // This function turns the given relay on.
@@ -161,6 +174,22 @@ bool Qwiic_Relay::changeAddress(uint8_t newAddress)
 
 }
 
+// This function writes a value to an address
+bool Qwiic_Relay::_writeAddress(uint8_t addressToWrite, uint8_t value)
+{
+  _i2cPort->beginTransmission(_address); // Start communication.
+  _i2cPort->write(addressToWrite); // Toggle it on....
+  _i2cPort->write(value);
+  if (_i2cPort->endTransmission() != 0)
+  {
+    return false; //Transaction failed
+  } // End communcation.
+  else
+  {
+    return true;
+  }
+  
+}
 // This function handles I-squared-C write commands for turning the relays on. 
 // The quad relay relies on the current state of the relay to determine whether
 // or not to turn the respective relay on (or off) and so the current state of

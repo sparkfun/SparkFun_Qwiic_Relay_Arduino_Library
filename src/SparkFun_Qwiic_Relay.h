@@ -25,8 +25,11 @@ enum SF_QUAD_RELAY_COMMANDS {
   RELAY_FOUR_STATUS,
   TURN_ALL_OFF        = 0xA,
   TURN_ALL_ON,       
-  TOGGLE_ALL
-
+  TOGGLE_ALL,
+  RELAY_ONE_PWM       = 0x10,
+  RELAY_TWO_PWM,
+  RELAY_THREE_PWM,
+  RELAY_FOUR_PWM
 };
 
 enum SF_QUAD_RELAY_STATUS {
@@ -56,6 +59,12 @@ enum SF_SINGLE_RELAY_STATUS {
 #define QUAD_ALTERNATE_ADDRESS   0x6C
 #define SINGLE_DEFAULT_ADDRESS   0x18
 #define SINGLE_ALTERNATE_ADDRESS 0x19
+
+#define QUAD_SSR_DEFAULT_ADDRESS     0x08
+#define QUAD_SSR_ALTERNATE_ADDRESS   0x09
+#define DUAL_SSR_DEFAULT_ADDRESS   0x0A
+#define DUAL_SSR_ALTERNATE_ADDRESS 0x0B
+
 #define ADDRESS_LOCATION 0xC7
 #define INCORR_PARAM     0xFF
 
@@ -87,6 +96,12 @@ class Qwiic_Relay
     // This function gets the version number of the SparkFun Single Relay.
     float singleRelayVersion();
 
+    //This function starts a slow PWM (1Hz) with a range from 0-100 as this is the maximum PWM resolution for Zero-crossing SSR's at 50Hz
+    bool setSlowPWM(uint8_t relay, uint8_t pwmValue);
+    
+    //This function starts a slow PWM (1Hz) with a range from 0-100 as this is the maximum PWM resolution for Zero-crossing SSR's at 50Hz
+    uint8_t getSlowPWM(uint8_t relay);
+    
     //*****----THE FOLLOWING FUNCTIONS ARE TO BE USED WITH THE SPARKFUN QUAD RELAY------*****
     
     // This function turns the given relay on. While this also works for the
@@ -123,6 +138,9 @@ class Qwiic_Relay
   private:
 
     uint8_t _address;
+
+    //This function writes a value to an address in the relay, used to set PWM values
+    bool _writeAddress(uint8_t address, uint8_t value);
 
     // This function handles I-squared-C write commands for turning the relays on. 
     // The quad relay relies on the current state of the relay to determine whether
