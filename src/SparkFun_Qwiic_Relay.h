@@ -142,27 +142,21 @@ class Qwiic_Relay
     //This function writes a value to an address in the relay, used to set PWM values
     bool _writeAddress(uint8_t address, uint8_t value);
 
-    // This function handles I-squared-C write commands for turning the relays on. 
+    // This function writes a command to the product with a simple
+    // I-squared-C transaction.
+    bool _writeCommand(uint8_t _command);
+
+    // This function handles I-squared-C write commands for changing a relay's state. 
     // The quad relay relies on the current state of the relay to determine whether
     // or not to turn the respective relay on (or off) and so the current state of
-    // the relay is checked before attempting to send a command. 
-    void _writeCommandOn(uint8_t _command);
-
-    // This function handles I-squared-C write commands for turning the relays off. 
-    // The quad relay relies on the current state of the relay to determine whether
-    // or not to turn the respective relay off (or on) and so the current state of
-    // the relay is checked before attempting to toggle it.
-    void _writeCommandOff(uint8_t _command);
-
-    // This command sends the I-squared-C write command to toggle relays from their
-    // current state.
-    void _writeCommandToggle(uint8_t _command);
+    // the relay is checked before attempting to send a command.
+    void _setRelayStatus(uint8_t _relay, uint8_t _desiredState);
 
     // This function requests information from the product with a simple
     // I-squared-C transaction.
     uint8_t _readCommand(uint8_t _command);
 
-    // The function reads thee version number of the Single Quad Relay.
+    // The function reads the version number of the Single Quad Relay.
     float _readVersion(uint8_t _command);
 
     TwoWire *_i2cPort;
