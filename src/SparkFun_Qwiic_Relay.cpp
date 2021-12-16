@@ -164,7 +164,7 @@ bool Qwiic_Relay::changeAddress(uint8_t newAddress)
         return false; 
 
   _i2cPort->beginTransmission( _address);  
-  _i2cPort->write(ADDRESS_LOCATION);  
+  _i2cPort->write(COMMAND_CHANGE_ADDRESS);  
   _i2cPort->write(newAddress);  
 
   if(!_i2cPort->endTransmission())
