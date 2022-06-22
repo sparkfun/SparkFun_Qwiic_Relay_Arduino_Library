@@ -19,20 +19,25 @@
 #include <Wire.h>
 #include "SparkFun_Qwiic_Relay.h"
 
-// All available product addresses labeled below. Close the onboard jumpers if
+// All default product addresses labeled below. Close the onboard jumpers if
 // you want to access the alternate addresses. 
 #define SINGLE_DEFAULT_ADDR 0x18 // Alternate jumper address 0x19
 #define QUAD_DEFAULT_ADDR 0x6D // Alternate jumper address 0x6C
 
+// There is a not so limited but still limited range of
+// addresses that are available to you 0x07 -> 0x78.
+#define NEW_ADDR 0x09 // Put the new address you want here
+#define IS_SINGLE_RELAY false // Change to true if using Single Relay
 
 // After changing the address you'll need to apply that address to a new
 // instance of the Qwiic_Relay class: "Qwiic_Relay relay(YOUR_NEW_ADDRESS_HERE)".
-Qwiic_Relay relay(QUAD_DEFAULT_ADDR); // Change to Single Relay Address if using Quad Relay
+Qwiic_Relay relay(QUAD_DEFAULT_ADDR); // Change to Single Relay Address if using Single Relay
 
 void setup()
 {
   Wire.begin(); 
   Serial.begin(115200);
+  delay(1000);
   
   // Let's see.....
   if(relay.begin())
@@ -40,9 +45,7 @@ void setup()
   else
     Serial.println("Check connections to Qwiic Relay.");
 
-  // There is a not so limited but still limited range of
-  // addresses that are available to you 0x07 -> 0x78.
-  if(relay.changeAddress(0x09)) // Put the address you want here. 
+  if(relay.changeAddress(NEW_ADDR, IS_SINGLE_RELAY))
     Serial.println("Address changed successfully."); 
   else
     Serial.println("Address change failed...");

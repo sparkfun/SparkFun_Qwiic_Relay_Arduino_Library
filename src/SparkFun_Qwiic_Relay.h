@@ -65,7 +65,8 @@ enum SF_SINGLE_RELAY_STATUS {
 #define DUAL_SSR_DEFAULT_ADDRESS   0x0A
 #define DUAL_SSR_ALTERNATE_ADDRESS 0x0B
 
-#define ADDRESS_LOCATION 0xC7
+#define QUAD_CHANGE_ADDRESS   0xC7
+#define SINGLE_CHANGE_ADDRESS 0x03
 #define INCORR_PARAM     0xFF
 
 class Qwiic_Relay
@@ -133,7 +134,7 @@ class Qwiic_Relay
 
     // This function changes the I-squared-C address of the Qwiic RFID. The address
     // is written to the memory location in EEPROM that determines its address.
-    bool changeAddress(uint8_t newAddress);
+    bool changeAddress(uint8_t newAddress, bool isSingleRelay);
 
   private:
 

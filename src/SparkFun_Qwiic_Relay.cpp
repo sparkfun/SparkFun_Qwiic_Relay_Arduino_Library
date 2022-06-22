@@ -157,14 +157,18 @@ uint8_t Qwiic_Relay::getState(uint8_t relay)
 
 // This function changes the I-squared-C address of the Qwiic RFID. The address
 // is written to the memory location in EEPROM that determines its address.
-bool Qwiic_Relay::changeAddress(uint8_t newAddress) 
+bool Qwiic_Relay::changeAddress(uint8_t newAddress, bool isSingleRelay = false)
 {
 
   if (newAddress < 0x07 || newAddress > 0x78) // Range of legal addresses
         return false; 
 
-  _i2cPort->beginTransmission( _address);  
-  _i2cPort->write(ADDRESS_LOCATION);  
+  _i2cPort->beginTransmission( _address);
+  if (isSingleRelay) {
+    _i2cPort->write(SINGLE_CHANGE_ADDRESS);
+  } else {
+    _i2cPort->write(QUAD_CHANGE_ADDRESS);
+  }
   _i2cPort->write(newAddress);  
 
   if(!_i2cPort->endTransmission())
