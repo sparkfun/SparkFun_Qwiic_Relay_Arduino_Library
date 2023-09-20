@@ -10,6 +10,8 @@
  */
 
 #include "SparkFun_Qwiic_Relay.h"
+#include <stdint.h>
+#include <Arduino.h>
 
 Qwiic_Relay::Qwiic_Relay(uint8_t address)
 {
@@ -66,7 +68,7 @@ uint8_t Qwiic_Relay::getState()
 // This function gets the version number of the SparkFun Single Relay.
 float Qwiic_Relay::singleRelayVersion()
 {
-    float version = _readVersion(FIRMWARE_VERSION);
+    float version = _readVersion(SFE_SINGLE_FIRMWARE_VERSION);
     return (version);
 }
 
@@ -160,15 +162,24 @@ uint8_t Qwiic_Relay::getState(uint8_t relay)
 
 // This function changes the I-squared-C address of the Qwiic RFID. The address
 // is written to the memory location in EEPROM that determines its address.
-bool Qwiic_Relay::changeAddress(uint8_t newAddress)
+bool Qwiic_Relay::changeAddress(uint8_t newAddress, bool singleRelay)
 {
 
     if (newAddress < 0x07 || newAddress > 0x78) // Range of legal addresses
         return false;
 
-    _i2cPort->beginTransmission(_address);
-    _i2cPort->write(ADDRESS_LOCATION);
-    _i2cPort->write(newAddress);
+    if(singleRelay)
+    {
+        _i2cPort->beginTransmission(_address);
+        _i2cPort->write(SINGLE_CHANGE_ADDRESS);
+        _i2cPort->write(newAddress);
+    }
+    else
+    {
+        _i2cPort->beginTransmission(_address);
+        _i2cPort->write(QUAD_CHANGE_ADDRESS);
+        _i2cPort->write(newAddress);
+    }
 
     if (!_i2cPort->endTransmission())
         return true;
@@ -183,13 +194,9 @@ bool Qwiic_Relay::_writeAddress(uint8_t addressToWrite, uint8_t value)
     _i2cPort->write(addressToWrite);       // Toggle it on....
     _i2cPort->write(value);
     if (_i2cPort->endTransmission() != 0)
-    {
         return false; // Transaction failed
-    }                 // End communcation.
     else
-    {
         return true;
-    }
 }
 // This function handles I-squared-C write commands for turning the relays on.
 // The quad relay relies on the current state of the relay to determine whether
@@ -203,9 +210,7 @@ void Qwiic_Relay::_writeCommandOn(uint8_t _command)
     {
         _status = _readCommand(RELAY_ONE_STATUS);
         if (_status == QUAD_RELAY_ON)
-        {           // Is it on? Then....
             return; // Do nothing....
-        }
         else
         {                                          // Off?
             _i2cPort->beginTransmission(_address); // Start communication.
@@ -218,9 +223,7 @@ void Qwiic_Relay::_writeCommandOn(uint8_t _command)
     {
         _status = _readCommand(RELAY_TWO_STATUS);
         if (_status == QUAD_RELAY_ON)
-        {
             return;
-        }
         else
         {
             _i2cPort->beginTransmission(_address);
@@ -233,9 +236,7 @@ void Qwiic_Relay::_writeCommandOn(uint8_t _command)
     {
         _status = _readCommand(RELAY_THREE_STATUS);
         if (_status == QUAD_RELAY_ON)
-        {
             return;
-        }
         else
         {
             _i2cPort->beginTransmission(_address);
@@ -248,9 +249,7 @@ void Qwiic_Relay::_writeCommandOn(uint8_t _command)
     {
         _status = _readCommand(RELAY_FOUR_STATUS);
         if (_status == QUAD_RELAY_ON)
-        {
             return;
-        }
         else
         {
             _i2cPort->beginTransmission(_address);
@@ -289,9 +288,7 @@ void Qwiic_Relay::_writeCommandOff(uint8_t _command)
     {
         _status = _readCommand(RELAY_ONE_STATUS);
         if (_status == QUAD_RELAY_OFF)
-        {           // Is the board off?
             return; // Do nothing...
-        }
         else
         {                                          // Then it must be on...
             _i2cPort->beginTransmission(_address); // Start communication.
@@ -304,9 +301,7 @@ void Qwiic_Relay::_writeCommandOff(uint8_t _command)
     {
         _status = _readCommand(RELAY_TWO_STATUS);
         if (_status == QUAD_RELAY_OFF)
-        {
             return;
-        }
         else
         {
             _i2cPort->beginTransmission(_address); // Start communication.
@@ -319,9 +314,7 @@ void Qwiic_Relay::_writeCommandOff(uint8_t _command)
     {
         _status = _readCommand(RELAY_THREE_STATUS);
         if (_status == QUAD_RELAY_OFF)
-        {
             return;
-        }
         else
         {
             _i2cPort->beginTransmission(_address); // Start communication.
@@ -334,9 +327,7 @@ void Qwiic_Relay::_writeCommandOff(uint8_t _command)
     {
         _status = _readCommand(RELAY_FOUR_STATUS);
         if (_status == QUAD_RELAY_OFF)
-        {
             return;
-        }
         else
         {
             _i2cPort->beginTransmission(_address); // Start communication.
@@ -362,7 +353,7 @@ uint8_t Qwiic_Relay::_readCommand(uint8_t _command)
     _i2cPort->write(_command);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, (uint8_t)1);
     uint8_t status = _i2cPort->read();
     return (status);
 }
@@ -374,7 +365,7 @@ float Qwiic_Relay::_readVersion(uint8_t _command)
     _i2cPort->write(_command);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 2);
+    _i2cPort->requestFrom(_address, (uint8_t)2);
     float _versValue = _i2cPort->read();
     _versValue += (float)_i2cPort->read() / 10.0;
     return (_versValue);
