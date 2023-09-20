@@ -10,6 +10,7 @@
  */
 
 #include "SparkFun_Qwiic_Relay.h"
+#include <cstdint>
 
 Qwiic_Relay::Qwiic_Relay(uint8_t address)
 {
@@ -362,7 +363,7 @@ uint8_t Qwiic_Relay::_readCommand(uint8_t _command)
     _i2cPort->write(_command);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 1);
+    _i2cPort->requestFrom(_address, (uint8_t)1);
     uint8_t status = _i2cPort->read();
     return (status);
 }
@@ -374,7 +375,7 @@ float Qwiic_Relay::_readVersion(uint8_t _command)
     _i2cPort->write(_command);
     _i2cPort->endTransmission();
 
-    _i2cPort->requestFrom(_address, 2);
+    _i2cPort->requestFrom(_address, (uint8_t)2);
     float _versValue = _i2cPort->read();
     _versValue += (float)_i2cPort->read() / 10.0;
     return (_versValue);
