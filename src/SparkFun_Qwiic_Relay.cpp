@@ -68,7 +68,7 @@ uint8_t Qwiic_Relay::getState()
 // This function gets the version number of the SparkFun Single Relay.
 float Qwiic_Relay::singleRelayVersion()
 {
-    float version = _readVersion(FIRMWARE_VERSION);
+    float version = _readVersion(SFE_SINGLE_FIRMWARE_VERSION);
     return (version);
 }
 
